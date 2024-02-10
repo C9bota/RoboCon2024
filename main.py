@@ -3,6 +3,8 @@ import threading
 import signal
 import time
 
+import network
+
 shared_flag = False
 lock = threading.Lock()
 
@@ -12,6 +14,8 @@ def update_flag(l_lock):
         with lock:
             shared_flag = True
             print("update_flag(): Up Flag")
+            # 通信処理
+            network.get_flag()
 
         time.sleep(15)
 
