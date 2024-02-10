@@ -12,10 +12,9 @@ def update_flag(l_lock):
     global shared_flag
     while True:
         with lock:
-            shared_flag = True
-            print("update_flag(): Up Flag")
             # 通信処理
-            network.get_flag()
+            shared_flag = network.get_flag()
+            print("update_flag(): Up Flag")
 
         time.sleep(15)
 
