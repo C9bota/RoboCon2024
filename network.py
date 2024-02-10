@@ -10,6 +10,8 @@ endpoint = "purchaceStatus"
 # デバッグ用URL
 url = "https://api.github.com/users/switch23"
 
+
+# フラグ取得メソッド
 def get_flag():
     req = urllib.request.Request(url)
 
