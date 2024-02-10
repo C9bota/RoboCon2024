@@ -2,9 +2,12 @@ import urllib.request
 import urllib.parse
 import json
 
+# 本番用URL
 host = "https://"
 endpoint = "purchaceStatus"
 #url = f"{host}/{endpoint}"
+
+# デバッグ用URL
 url = "https://api.github.com/users/switch23"
 
 def get_flag():
