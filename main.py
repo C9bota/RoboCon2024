@@ -8,17 +8,22 @@ import network
 shared_flag = False
 lock = threading.Lock()
 
-def update_flag(l_lock):
+def update_flag():
     global shared_flag
     while True:
+        remote_flag = network.get_flag()
         with lock:
             # 通信処理
-            shared_flag = network.get_flag()
+            shared_flag = remote_flag
             print("update_flag(): Up Flag")
 
         time.sleep(15)
 
-def check_flag(l_lock):
+def check_flag():
+    """
+    共有メモリ上のフラグを見て、TrueであればFalseにする
+    Falseであればなにもしない
+    """
     global shared_flag
     while True:
         with lock:
