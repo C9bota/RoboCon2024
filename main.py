@@ -35,6 +35,18 @@ def check_flag():
         
         time.sleep(4)
 
+def down_flag():
+    """
+    共有メモリ上のフラグを見て、TrueであればFalseにする
+    Falseであればなにもしない
+    """
+    global shared_flag
+    with lock:
+        if shared_flag:
+            shared_flag = False
+            print("check_flag(): Down Flag")
+
+
 def exit_program(signal, frame):
     print("Exiting...")
     sys.exit(1)
