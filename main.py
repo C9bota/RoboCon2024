@@ -9,9 +9,8 @@ import qumcum_ctrl
 shared_flag = False
 lock = threading.Lock()
 
-def update_flag():
+def update_flag(lock):
     global shared_flag
-    global lock
     while True:
         remote_flag = network.get_flag()
         with lock:
@@ -27,9 +26,9 @@ def exit_program(signal, frame):
 
 threads = []
 
-t1 = threading.Thread(target=update_flag)
+t1 = threading.Thread(target=update_flag, args=(lock, ))
 threads.append(t1)
-t2 = threading.Thread(target=qumcum_ctrl.qumcum_main)
+t2 = threading.Thread(target=qumcum_ctrl.qumcum_main, args=(lock, ))
 threads.append(t2)
 t1.start()
 t2.start()

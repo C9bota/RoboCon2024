@@ -8,22 +8,20 @@ sales_pitch = [
     "oyatude hitoyasumi simasenka"
 ]
 
-def check_flag():
+def check_flag(lock):
     """
     共有メモリ上のフラグの値を返す
     """
     global shared_flag
-    global lock
     with lock:
         return shared_flag
 
-def down_flag():
+def down_flag(lock):
     """
     共有メモリ上のフラグを見て、TrueであればFalseにする
     Falseであればなにもしない
     """
     global shared_flag
-    global lock
     with lock:
         if shared_flag:
             shared_flag = False
@@ -77,7 +75,7 @@ def stop_and_speech(duration_stop=1):
     qumcum.voice_word(sales_pitch[0])
     qumcum.wait(duration_stop)
 
-def qumcum_main():
+def qumcum_main(lock):
     """
     Qumcum制御メイン
     """
@@ -85,13 +83,13 @@ def qumcum_main():
     try:
         while True:     # メイン無限ループ (Outer)
             while True: # メイン無限ループ (Inner)
-                if check_flag():
+                if check_flag(lock):
                     break
                 move_then_stop(5)
-                if check_flag():
+                if check_flag(lock):
                     break
                 stop_and_speech(5)
-            down_flag()
+            down_flag(lock)
     finally:
         qumcum_terminate()  # 終了処理
 
