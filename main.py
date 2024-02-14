@@ -21,19 +21,11 @@ def update_flag():
 
 def check_flag():
     """
-    共有メモリ上のフラグを見て、TrueであればFalseにする
-    Falseであればなにもしない
+    共有メモリ上のフラグの値を返す
     """
     global shared_flag
-    while True:
-        with lock:
-            if shared_flag:
-                shared_flag = False
-                print("check_flag(): Down Flag")
-            else:
-                print("check_flag(): Flag is False")
-        
-        time.sleep(4)
+    with lock:
+        return shared_flag
 
 def down_flag():
     """
