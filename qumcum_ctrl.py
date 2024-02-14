@@ -8,6 +8,27 @@ sales_pitch = [
     "oyatude hitoyasumi simasenka"
 ]
 
+def check_flag():
+    """
+    共有メモリ上のフラグの値を返す
+    """
+    global shared_flag
+    global lock
+    with lock:
+        return shared_flag
+
+def down_flag():
+    """
+    共有メモリ上のフラグを見て、TrueであればFalseにする
+    Falseであればなにもしない
+    """
+    global shared_flag
+    global lock
+    with lock:
+        if shared_flag:
+            shared_flag = False
+            print("check_flag(): Down Flag")
+
 def qumcum_init(id=''):
     """iniialize"""
     qumcum.connect(id)
@@ -27,13 +48,13 @@ def get_initial_angle():
     return initial_angles
     # print(f'initial_angles: {initial_angles}')
 
-def move_then_stop(duration=1):
+def move_then_stop(duration_walk=1):
     """
     前進を開始し、セリフを喋る。
-    指定した時間の間にセリフを喋り、前進する
-    
+    指定した時間以上は動き続け、その間にセリフを喋る
+
     Args:
-        duration (int): 前進する時間
+        duration_walk (int): 前進する時間 (sec)
     """
     qumcum.set_motorpower()
     qumcum.motor_power_on(50)
@@ -41,9 +62,38 @@ def move_then_stop(duration=1):
     qumcum.motor_start(False)
     qumcum.voice_word(sales_pitch[0])
     qumcum.voice_word(sales_pitch[1])
-    qumcum.wait(duration)
+    qumcum.wait(duration_walk)
     qumcum.motor_power_off()
     qumcum.wait(0.7)
+
+def stop_and_speech(duration_stop=1):
+    """
+    停止したまま、セリフを喋る。
+    指定した時間以上止まっている
+    
+    Args:
+        duration_stop (int): 停止する時間 (sec)
+    """
+    qumcum.voice_word(sales_pitch[0])
+    qumcum.wait(duration_stop)
+
+def qumcum_main():
+    """
+    Qumcum制御メイン
+    """
+    qumcum_init(ID)     # 初期化
+    try:
+        while True:     # メイン無限ループ (Outer)
+            while True: # メイン無限ループ (Inner)
+                if check_flag():
+                    break
+                move_then_stop(5)
+                if check_flag():
+                    break
+                stop_and_speech(5)
+            down_flag()
+    finally:
+        qumcum_terminate()  # 終了処理
 
 if __name__ == "__main__":
     qumcum_init(ID)

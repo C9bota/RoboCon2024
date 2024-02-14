@@ -4,6 +4,7 @@ import signal
 import time
 
 import network
+import qumcum_ctrl
 
 shared_flag = False
 lock = threading.Lock()
@@ -26,9 +27,9 @@ def exit_program(signal, frame):
 
 threads = []
 
-t1 = threading.Thread(target=update_flag, args = (lock,))
+t1 = threading.Thread(target=update_flag)
 threads.append(t1)
-t2 = threading.Thread(target=check_flag, args = (lock,))
+t2 = threading.Thread(target=qumcum_ctrl.qumcum_main)
 threads.append(t2)
 t1.start()
 t2.start()
