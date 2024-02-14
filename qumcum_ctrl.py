@@ -2,30 +2,14 @@
 
 import qumcum_ble as qumcum
 
+import flag_op
+
 ID = '8D16'
 sales_pitch = [
     "irasshaimase--",
-    "oyatude hitoyasumi simasenka"
+    "oyatude hitoyasumi simasenka",
+    "arigato- gozaimasita-"
 ]
-
-def check_flag(lock):
-    """
-    共有メモリ上のフラグの値を返す
-    """
-    global shared_flag
-    with lock:
-        return shared_flag
-
-def down_flag(lock):
-    """
-    共有メモリ上のフラグを見て、TrueであればFalseにする
-    Falseであればなにもしない
-    """
-    global shared_flag
-    with lock:
-        if shared_flag:
-            shared_flag = False
-            print("check_flag(): Down Flag")
 
 def qumcum_init(id=''):
     """iniialize"""
@@ -75,7 +59,19 @@ def stop_and_speech(duration_stop=1):
     qumcum.voice_word(sales_pitch[0])
     qumcum.wait(duration_stop)
 
-def qumcum_main(lock):
+def appreciate(duration=1):
+    """
+    停止したまま、セリフを喋る。(購入後用)
+    指定した時間以上止まっている
+    
+    Args:
+        duration_stop (int): 停止する時間 (sec)
+    """
+    qumcum.voice_word(sales_pitch[2])
+    qumcum.wait(duration)
+
+
+def qumcum_main():
     """
     Qumcum制御メイン
     """
@@ -83,13 +79,14 @@ def qumcum_main(lock):
     try:
         while True:     # メイン無限ループ (Outer)
             while True: # メイン無限ループ (Inner)
-                if check_flag(lock):
-                    break
                 move_then_stop(5)
-                if check_flag(lock):
+                if flag_op.check_flag():
                     break
                 stop_and_speech(5)
-            down_flag(lock)
+                if flag_op.check_flag():
+                    break
+            appreciate(10)
+            flag_op.down_flag()
     finally:
         qumcum_terminate()  # 終了処理
 
