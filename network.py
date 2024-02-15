@@ -3,14 +3,14 @@ import urllib.parse
 import json
 
 # 本番用URL
-"""
-host = "https://"
-endpoint = "purchaceStatus"
-"""
+host = "https://roboconwebapps.azurewebsites.net"
+endpoint = "purchase_status"
 
+"""
 # デバッグ用URL
 host = "https://api.github.com"
 endpoint =  "users/switch23"
+"""
 
 # URL作成
 url = f"{host}/{endpoint}"
