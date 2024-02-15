@@ -33,8 +33,8 @@ def get_flag():
         if res.status == 200:
             data = json.loads(body)
             print(data)
-            # TODO: 取得したデータに応じて戻り値を変更
-            return True
+            # 取得結果を返却
+            return data['purchase_flag']
         else:
             print("Error: ", res.status)
             return False
