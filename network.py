@@ -3,14 +3,14 @@ import urllib.parse
 import json
 
 # 本番用URL
-"""
-host = "https://"
-endpoint = "purchaceStatus"
-"""
+host = "https://roboconwebapps.azurewebsites.net"
+endpoint = "purchase_status"
 
+"""
 # デバッグ用URL
 host = "https://api.github.com"
 endpoint =  "users/switch23"
+"""
 
 # URL作成
 url = f"{host}/{endpoint}"
@@ -33,8 +33,8 @@ def get_flag():
         if res.status == 200:
             data = json.loads(body)
             print(data)
-            # TODO: 取得したデータに応じて戻り値を変更
-            return True
+            # 取得結果を返却
+            return data['purchase_flag']
         else:
             print("Error: ", res.status)
             return False
